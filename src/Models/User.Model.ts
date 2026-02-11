@@ -1,6 +1,7 @@
-import { Column } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { baseEntry } from './BaseEntry.Model';
-
+import { Exclude } from 'class-transformer';
+@Entity('User')
 export class UserModel extends baseEntry {
   @Column({ unique: true, nullable: false })
   email: string;
@@ -8,6 +9,7 @@ export class UserModel extends baseEntry {
   @Column({ nullable: false, unique: true })
   username: string;
 
+  @Exclude()
   @Column({ nullable: false })
   password: string;
 
