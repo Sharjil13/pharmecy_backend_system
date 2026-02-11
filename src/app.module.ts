@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import dotenv from 'dotenv';
 import { UserModule } from './Modules/UserModule/User.Module';
 import { AuthModule } from './Modules/AuthModule/Auth.Module';
+import { QueueModule } from './Modules/Queue/Queue.module';
 
 dotenv.config();
 @Module({
@@ -19,6 +20,7 @@ dotenv.config();
     }),
     AuthModule,
     UserModule,
+    QueueModule,
   ],
 })
 export class AppModule {}

@@ -1,7 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import {
+  BadRequestException,
+  ClassSerializerInterceptor,
+  ValidationPipe,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { GlobalExceptionFilter } from './Common/filter/global-exception.filter';
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
@@ -10,14 +15,24 @@ async function bootstrap() {
     app.useGlobalInterceptors(
       new ClassSerializerInterceptor(app.get(Reflector)),
     );
+
     //For howing Validation Errors
     app.useGlobalPipes(
       new ValidationPipe({
-        whitelist: true, // strips out any unknown fields
-        forbidNonWhitelisted: true, // throws error if extra fields provided
-        transform: true, // transforms plain JS object into DTO instance
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+        exceptionFactory: (errors) => {
+          const messages = errors
+            .map((err) => Object.values(err.constraints || {}))
+            .flat();
+
+          return new BadRequestException(messages);
+        },
       }),
     );
+    // Handle Global errors
+    app.useGlobalFilters(new GlobalExceptionFilter());
     console.log('📦 Database connected successfully');
     await app.listen(process.env.PORT || 3000, () => {
       console.log(`Server running on port ${process.env.PORT || 3000}`);
