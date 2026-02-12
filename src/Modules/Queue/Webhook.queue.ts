@@ -8,7 +8,7 @@ export class weebhookQueueService {
   constructor() {
     const connection: RedisOptions = {
       host: process.env.REDIS_HOST || 'localhost',
-      port: 6379,
+      port: parseInt(process.env.REDIS_PORT || '6379'),
     };
 
     this.queue = new Queue('stripe-webhook-queue', {

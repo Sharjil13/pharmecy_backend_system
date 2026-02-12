@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as bodyParser from 'body-parser';
 import {
   BadRequestException,
   ClassSerializerInterceptor,
@@ -33,6 +34,9 @@ async function bootstrap() {
     );
     // Handle Global errors
     app.useGlobalFilters(new GlobalExceptionFilter());
+
+    app.use(bodyParser.raw({ type: 'application/json' })); // required by Stripe
+
     console.log('📦 Database connected successfully');
     await app.listen(process.env.PORT || 3000, () => {
       console.log(`Server running on port ${process.env.PORT || 3000}`);

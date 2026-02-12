@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { UserModule } from './Modules/UserModule/User.Module';
 import { AuthModule } from './Modules/AuthModule/Auth.Module';
 import { QueueModule } from './Modules/Queue/Queue.module';
+import { PaymentModule } from './Modules/PaymentModule/Payment.Module';
 
 dotenv.config();
 @Module({
@@ -21,6 +22,7 @@ dotenv.config();
     AuthModule,
     UserModule,
     QueueModule,
+    PaymentModule,
   ],
 })
 export class AppModule {}
