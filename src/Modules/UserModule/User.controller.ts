@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { CreateUserDto } from 'src/Modules/UserModule/DTO/User/CreateUserDTO';
 import { ApiResponce } from 'src/utils/ApiResponce';
 import { UserServices } from 'src/Modules/UserModule/user.Services';
@@ -104,5 +104,10 @@ export class UserController {
       }
       return new ApiResponce(400, false, 'Something went wrong', {});
     }
+  }
+
+  @Get('/user')
+  getUser(@Req() req) {
+    return req.user;
   }
 }

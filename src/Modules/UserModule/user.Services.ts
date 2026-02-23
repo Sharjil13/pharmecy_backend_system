@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { AuthService } from '../AuthModule/Auth.Service';
 import { UserResponseDto } from './User.Resource';
 import { LoginUserDto } from './DTO/User/LoginDTO';
+import { RefreshTokenModel } from 'src/Models/RefreshToken.Model';
 
 @Injectable()
 export class UserServices {
@@ -64,7 +65,6 @@ export class UserServices {
       verify_token: '',
       verified_at: new Date(),
     });
-
     return plainToInstance(UserResponseDto, UpdatedUser);
   }
 
@@ -84,5 +84,9 @@ export class UserServices {
       throw new BadRequestException('Invalid password');
     }
     return plainToInstance(UserResponseDto, existedUser);
+  }
+
+  getUser(user: UserModel) {
+    return user;
   }
 }

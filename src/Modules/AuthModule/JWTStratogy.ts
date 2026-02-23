@@ -31,6 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         'isActive',
         'isVerified',
         'role',
+        'tenantId',
       ],
     });
 
@@ -42,6 +43,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       isAdmin: user?.isAdmin,
       isActive: user?.isActive,
       isVerified: user?.isVerified,
+      tenantId: user?.tenantId,
     };
   }
 }

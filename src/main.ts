@@ -10,6 +10,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { GlobalExceptionFilter } from './Common/filter/global-exception.filter';
 import cookieParser from 'cookie-parser';
+import { RolesGuard } from './Common/Guards/roles.guards';
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
@@ -43,6 +44,9 @@ async function bootstrap() {
     app.use(bodyParser.json({ limit: '5mb' }));
     // Use Cookie parcer to make cookies work
     app.use(cookieParser());
+
+    // Global Guard for Authentication and Authorization
+    app.useGlobalGuards(new RolesGuard(app.get(Reflector)));
 
     console.log('📦 Database connected successfully');
     await app.listen(process.env.PORT || 3000, () => {

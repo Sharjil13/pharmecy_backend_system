@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { UUIDEntry } from './UUID.entry';
 import { TenantModel } from './Tent.Model';
+import { RefreshTokenModel } from './RefreshToken.Model';
 
 @Entity('users')
 export class UserModel extends UUIDEntry {
@@ -51,10 +52,15 @@ export class UserModel extends UUIDEntry {
   @Column({ name: 'tenant_id', nullable: true })
   tenantId?: string;
 
+  // Tenant Relations
   @ManyToOne(() => TenantModel, (tenant) => tenant.users, {
     onDelete: 'SET NULL',
     nullable: true,
   })
   @JoinColumn({ name: 'tenant_id' })
   tenant?: TenantModel;
+
+  // Refresh Token Relations
+  @OneToMany(() => RefreshTokenModel, (refreshToken) => refreshToken.user)
+  refreshTokens: RefreshTokenModel[];
 }
