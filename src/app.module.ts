@@ -5,6 +5,9 @@ import { UserModule } from './Modules/UserModule/User.Module';
 import { AuthModule } from './Modules/AuthModule/Auth.Module';
 import { QueueModule } from './Modules/Queue/Queue.module';
 import { PaymentModule } from './Modules/PaymentModule/Payment.Module';
+import { TenantModule } from './Modules/TenantModule/Tenant.Module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './Modules/AuthModule/jwt-auth.guard';
 
 dotenv.config();
 @Module({
@@ -21,8 +24,15 @@ dotenv.config();
     }),
     AuthModule,
     UserModule,
+    TenantModule,
     QueueModule,
     PaymentModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard, // global guard
+    },
   ],
 })
 export class AppModule {}

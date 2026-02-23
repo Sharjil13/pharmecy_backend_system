@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
+
 import {
   BadRequestException,
   ClassSerializerInterceptor,
@@ -8,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GlobalExceptionFilter } from './Common/filter/global-exception.filter';
+import cookieParser from 'cookie-parser';
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
@@ -23,6 +25,7 @@ async function bootstrap() {
         whitelist: true,
         forbidNonWhitelisted: true,
         transform: true,
+        forbidUnknownValues: true,
         exceptionFactory: (errors) => {
           const messages = errors
             .map((err) => Object.values(err.constraints || {}))
@@ -32,10 +35,14 @@ async function bootstrap() {
         },
       }),
     );
+
     // Handle Global errors
     app.useGlobalFilters(new GlobalExceptionFilter());
 
-    app.use(bodyParser.raw({ type: 'application/json' })); // required by Stripe
+    // Use JSON parser for regular JSON requests
+    app.use(bodyParser.json({ limit: '5mb' }));
+    // Use Cookie parcer to make cookies work
+    app.use(cookieParser());
 
     console.log('📦 Database connected successfully');
     await app.listen(process.env.PORT || 3000, () => {
